@@ -202,6 +202,12 @@ ul {
   padding: 100px 0;
 }
 
+@media (max-width: 768px) {
+  .section {
+    padding: 50px 0;
+  }
+}
+
 .section-title {
   display: flex;
   align-items: center;
@@ -476,19 +482,60 @@ ul {
   }
 
   /* Hero Mobile */
+  .hero {
+    padding-top: 80px;
+    min-height: auto;
+  }
+
   .hero-container {
     flex-direction: column;
     text-align: center;
-    gap: 40px;
+    gap: 20px;
   }
 
   .hero-visual {
-    order: -1;
-    /* Image on top for mobile */
+    display: none !important;
+    /* Hide hero image on mobile */
   }
 
   .hero .description {
-    margin: 24px auto 32px;
+    margin: 16px auto 24px;
+  }
+
+  .cta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn.secondary {
+    margin-left: 0;
+  }
+
+  /* Reduce section spacing on mobile */
+  .section {
+    padding: 50px 0;
+  }
+
+  .section-title {
+    margin-bottom: 2rem;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  /* Reduce grid gaps */
+  .grid-3 {
+    gap: 16px;
+  }
+
+  .project-grid {
+    gap: 32px;
+  }
+
+  .card {
+    padding: 1.5rem;
   }
 }
 
@@ -775,6 +822,7 @@ ul {
     transition-delay: 0s !important;
   }
 }
+
 /* Workflow Modal Styles */
 .modal {
   position: fixed;
@@ -956,6 +1004,7 @@ ul {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -981,7 +1030,10 @@ ul {
 }
 
 /* Neon Node Highlights */
-.mermaid .node rect, .mermaid .node circle, .mermaid .node polygon, .mermaid .node path {
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node polygon,
+.mermaid .node path {
   stroke: var(--primary-color) !important;
   stroke-width: 2px !important;
   fill: rgba(100, 255, 218, 0.05) !important;
@@ -1020,4 +1072,3 @@ ul {
   height: auto !important;
   transition: transform 0.3s ease;
 }
-
