@@ -197,6 +197,36 @@ ul {
   display: none;
 }
 
+/* Mobile Header */
+@media (max-width: 768px) {
+  .site-header {
+    padding: 1rem 0;
+  }
+
+  .site-header nav {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+  }
+
+  .nav-links {
+    display: none;
+    /* Hide navigation links on mobile - can be replaced with hamburger menu if needed */
+  }
+
+  #theme-toggle {
+    padding: 0.25rem;
+  }
+
+  #theme-toggle svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 /* Sections */
 .section {
   padding: 100px 0;
