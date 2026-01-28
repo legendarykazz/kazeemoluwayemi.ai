@@ -1,0 +1,561 @@
+{
+  "updatedAt": "2026-01-20T07:19:42.326Z",
+  "createdAt": "2026-01-19T09:33:20.825Z",
+  "id": "ThtZaKUCdk_WWdCISEg5e",
+  "name": "incomplete auto email generator",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        784
+      ],
+      "id": "a132b170-0694-4d3c-9853-d455a38faf87",
+      "name": "Telegram Trigger",
+      "webhookId": "867ec39b-40a9-4fa8-8414-1af87bf27aff",
+      "credentials": {
+        "telegramApi": {
+          "id": "6incOTajbNgzHOBU",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "emailLink",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "693439f1-34b7-4c4b-ad03-59a45c3a5f9a",
+      "name": "Workflow Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        144,
+        784
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.urls }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "87a91438-5993-4815-8ce3-0990f8ce5e48",
+      "name": "Fetch Email from Google Play Console",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1264,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.item.json.data || $input.item.json.body || '';\n\nconst emailRegex = /[a-zA-Z0-9._%+-]+@(gmail\\.com|yahoo\\.com|hotmail\\.com)/gi;\n\nconst emails = html.match(emailRegex) || [];\n\nconst uniqueEmails = [...new Set(emails.map(email => email.toLowerCase()))];\n\nconst currentUrl = $('Loop Over URLs').item.json.urls || '';\n\nreturn uniqueEmails.map(email => ({\n  json: {\n    email,\n    sourceUrl: currentUrl,\n    extractedAt: new Date().toISOString()\n  }\n}));"
+      },
+      "id": "d8a681d8-e0ce-4190-8a1a-7701a325d97e",
+      "name": "Extract Email Addresses",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1oBAsQI0jDmUmGm1qI6t3OkmWMEQz7pOma4riKNpy1s4",
+          "mode": "list",
+          "cachedResultName": "Telegram botapp",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oBAsQI0jDmUmGm1qI6t3OkmWMEQz7pOma4riKNpy1s4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Sheet1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.email }}",
+            "Source URL": "={{ $json.sourceUrl }}",
+            "Extracted At": "={{ $json.extractedAt }}",
+            "Email Sent": "No"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Source URL",
+              "displayName": "Source URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "Extracted At",
+              "displayName": "Extracted At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "Email Sent",
+              "displayName": "Email Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "f114c679-0cef-4c5b-9305-53f9050c7830",
+      "name": "Save Emails to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1712,
+        592
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aiSheTshbOYcgNiD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Prepare Email Content').item.json.email }}",
+        "subject": "={{ $('Prepare Email Content').item.json.subject }}",
+        "emailType": "text",
+        "message": "={{ $('Prepare Email Content').item.json.body }}",
+        "options": {}
+      },
+      "id": "4145b357-7772-442e-853b-4da4f3b26cba",
+      "name": "Send Email via Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2160,
+        760
+      ],
+      "webhookId": "f08c4c77-5619-4e21-a48d-0614b384b0d6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "m7Ub04jBzw4I8ODr",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Email Extraction & AI Composition Workflow\n\nThis workflow:\n1. **Accepts** a Google Play Console link via form\n2. **Fetches** the page content\n3. **Extracts** email addresses using regex\n4. **Saves** emails to Google Sheets\n5. **Composes** personalized emails using ChatGPT\n6. **Sends** emails via Gmail\n\n💡 The AI generates unique subject lines and email bodies for each recipient.",
+        "height": 560,
+        "width": 656
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1208,
+        192
+      ],
+      "typeVersion": 1,
+      "id": "28d354e8-aa57-44bc-868c-d8dfb2fbea26",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "subject",
+              "value": "App Publishing",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "body",
+              "value": "Hello,\n\nI came across your game on Google play store and I have some questions to ask\n\nAre you the right person to discuss with?\n\n\nI would be waiting for your response \n\n(Jamal)",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "email",
+              "value": "={{ $('Save Emails to Google Sheets').item.json.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "rowNumber",
+              "value": "={{ $('Save Emails to Google Sheets').item.json.row_number }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f06e28e2-dcc0-44a8-a683-579b38aa66b7",
+      "name": "Prepare Email Content",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1936,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {}
+      },
+      "id": "f7010d1f-05f0-428b-9139-ef1a11ad8b80",
+      "name": "Extract Text from Word Document",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        368,
+        784
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $input.item.json.text || '';\nconst urlRegex = /https?:\\/\\/[^\\s]+/gi;\nconst urls = text.match(urlRegex) || [];\nreturn [{ json: { urls: urls, totalUrls: urls.length } }];"
+      },
+      "id": "3a49f477-e2b2-439d-a469-44996b3ebccd",
+      "name": "Extract URLs from Document",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        592,
+        784
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "urls",
+        "options": {}
+      },
+      "id": "3af7b3c3-cdd2-46ec-baae-fab62fe86734",
+      "name": "Split URLs into Individual Items",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        816,
+        784
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": true
+        }
+      },
+      "id": "b49144b0-e4e9-4266-a86b-f90e5a6ddb7a",
+      "name": "Loop Over URLs",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1040,
+        784
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ 'Processing complete! \\n\\nTotal URLs processed: ' + $('Extract URLs from Document').item.json.totalUrls + '\\nEmails extracted and saved to Google Sheets.' }}",
+        "additionalFields": {}
+      },
+      "id": "9a73dd3b-c6db-4872-ac9d-d53b46bb75d0",
+      "name": "Send Status Update to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1264,
+        784
+      ],
+      "webhookId": "9dcefa01-ea2f-4f88-9736-3817177d016e",
+      "credentials": {
+        "telegramApi": {
+          "id": "6incOTajbNgzHOBU",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Workflow Configuration": {
+      "main": [
+        [
+          {
+            "node": "Extract Text from Word Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Email from Google Play Console": {
+      "main": [
+        [
+          {
+            "node": "Extract Email Addresses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Email Addresses": {
+      "main": [
+        [
+          {
+            "node": "Save Emails to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Emails to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Prepare Email Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Email Content": {
+      "main": [
+        [
+          {
+            "node": "Send Email via Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Text from Word Document": {
+      "main": [
+        [
+          {
+            "node": "Extract URLs from Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract URLs from Document": {
+      "main": [
+        [
+          {
+            "node": "Split URLs into Individual Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split URLs into Individual Items": {
+      "main": [
+        [
+          {
+            "node": "Loop Over URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over URLs": {
+      "main": [
+        [
+          {
+            "node": "Send Status Update to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Email from Google Play Console",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email via Gmail": {
+      "main": [
+        [
+          {
+            "node": "Loop Over URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "8774885d-ec2c-4b61-b516-bca5dfda9a47",
+  "activeVersionId": null,
+  "versionCounter": 71,
+  "triggerCount": 1,
+  "tags": [],
+  "parentFolder": null,
+  "activeVersion": null,
+  "homeProject": {
+    "id": "qIDb01YywEqdTnQG",
+    "type": "personal",
+    "name": "nelsol   <nelsonmontez95@gmail.com>",
+    "icon": null
+  },
+  "sharedWithProjects": [],
+  "usedCredentials": [
+    {
+      "id": "6incOTajbNgzHOBU",
+      "name": "Telegram account",
+      "type": "telegramApi",
+      "currentUserHasAccess": true,
+      "homeProject": {
+        "id": "qIDb01YywEqdTnQG",
+        "type": "personal",
+        "name": "nelsol   <nelsonmontez95@gmail.com>",
+        "icon": null
+      },
+      "sharedWithProjects": []
+    },
+    {
+      "id": "QWHOYebaN9VrdH5R",
+      "name": "Google Sheets account 2",
+      "type": "googleSheetsOAuth2Api",
+      "currentUserHasAccess": true,
+      "homeProject": {
+        "id": "qIDb01YywEqdTnQG",
+        "type": "personal",
+        "name": "nelsol   <nelsonmontez95@gmail.com>",
+        "icon": null
+      },
+      "sharedWithProjects": []
+    },
+    {
+      "id": "aiSheTshbOYcgNiD",
+      "name": "Google Sheets account",
+      "type": "googleSheetsOAuth2Api",
+      "currentUserHasAccess": true,
+      "homeProject": {
+        "id": "qIDb01YywEqdTnQG",
+        "type": "personal",
+        "name": "nelsol   <nelsonmontez95@gmail.com>",
+        "icon": null
+      },
+      "sharedWithProjects": []
+    },
+    {
+      "id": "m7Ub04jBzw4I8ODr",
+      "name": "Gmail account 2",
+      "type": "gmailOAuth2",
+      "currentUserHasAccess": true,
+      "homeProject": {
+        "id": "qIDb01YywEqdTnQG",
+        "type": "personal",
+        "name": "nelsol   <nelsonmontez95@gmail.com>",
+        "icon": null
+      },
+      "sharedWithProjects": []
+    }
+  ],
+  "scopes": [
+    "workflow:create",
+    "workflow:delete",
+    "workflow:execute",
+    "workflow:execute-chat",
+    "workflow:list",
+    "workflow:move",
+    "workflow:publish",
+    "workflow:read",
+    "workflow:share",
+    "workflow:update"
+  ],
+  "checksum": "c2dabdea72e8132aa8f8ed436cde3f9b05fb531847b5d4c5b9870dec5fbb8a95"
+}

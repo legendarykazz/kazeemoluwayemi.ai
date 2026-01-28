@@ -1,0 +1,84 @@
+{
+  "name": "chat box",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nMy name is Yemi your AI Engineer assistant. How can I assist you today?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -368,
+        -32
+      ],
+      "id": "c81f061b-bf33-457d-9fa1-17e74d6e2562",
+      "name": "When chat message received",
+      "webhookId": "5f6df999-8814-4485-a3e9-78855d6c18b1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an expert in civil Engineering and knows A lot about auto cad and prota structure.  and you can also guide on how to solve real life engineering issues related to Civil engineering you can explain concrete grades you talk about foundation soil types soil profiles and you can also give a step by step guide on how to design step in designing and what to do when any problem is encountered "
+            },
+            {
+              "content": "={{ $json.chatInput }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        -32
+      ],
+      "id": "a501c933-7770-4744-a167-b7c105b4579d",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "qldqV2djTvGHQFeZ",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "8fe5ab1e-a979-4def-b993-c243eaef74d4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9d74db7753ab2ff09eb448d74edca403fbaef2aa966de4b7d9202aca6dd91803"
+  },
+  "id": "y3OFa3RtQTDJPBDM",
+  "tags": []
+}

@@ -1,0 +1,348 @@
+{
+  "name": "Copy Email from Google Play Console via Link real prohect",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "emailLink",
+              "value": "={{ $('Form Trigger - Paste Link').item.json.emailLink }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fa7cef54-2c84-4fe6-9206-37a930ed36fa",
+      "name": "Workflow Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        1632
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Workflow Configuration').item.json.emailLink }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "5266ccdc-6fdc-433c-af91-5164eef3ca63",
+      "name": "Fetch Email from Google Play Console",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        304,
+        1632
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.item.json.data || $input.item.json.body || '';\nconst emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/g;\nconst emails = html.match(emailRegex) || [];\nconst uniqueEmails = [...new Set(emails)];\nreturn uniqueEmails.map(email => ({\n  json: {\n    email,\n    sourceUrl: $('Workflow Configuration').item.json.emailLink,\n    extractedAt: new Date().toISOString()\n  }\n}));"
+      },
+      "id": "c4102911-4fc1-452a-9fbd-4f4dca897edf",
+      "name": "Extract Email Addresses",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        1632
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1mh5GtkxoAGtgF5NFEHGSkInZ5hNH_uu8ZUJawlJFCk4",
+          "mode": "list",
+          "cachedResultName": "new n8nnn",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mh5GtkxoAGtgF5NFEHGSkInZ5hNH_uu8ZUJawlJFCk4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Sheet1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.email }}",
+            "Source URL": "={{ $json.sourceUrl }}",
+            "Extracted At": "={{ $json.extractedAt }}",
+            "Email Sent": "No"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Source URL",
+              "displayName": "Source URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "Extracted At",
+              "displayName": "Extracted At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "Email Sent",
+              "displayName": "Email Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "0d82a131-49c2-4b9a-a2fe-7936b0e10f62",
+      "name": "Save Emails to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        1632
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sZZFN1ncUySEXJWt",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Prepare Email Content').item.json.email }}",
+        "subject": "={{ $('Prepare Email Content').item.json.subject }}",
+        "emailType": "text",
+        "message": "={{ $('Prepare Email Content').item.json.body }}",
+        "options": {}
+      },
+      "id": "724eecee-3d28-4939-8634-1feee0b0fb50",
+      "name": "Send Email via Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        1632
+      ],
+      "webhookId": "f08c4c77-5619-4e21-a48d-0614b384b0d6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "HgRPGHVRkVqfabG4",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Email Extraction & AI Composition Workflow\n\nThis workflow:\n1. **Accepts** a Google Play Console link via form\n2. **Fetches** the page content\n3. **Extracts** email addresses using regex\n4. **Saves** emails to Google Sheets\n5. **Composes** personalized emails using ChatGPT\n6. **Sends** emails via Gmail\n\n💡 The AI generates unique subject lines and email bodies for each recipient.",
+        "height": 560,
+        "width": 656
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        240,
+        1232
+      ],
+      "typeVersion": 1,
+      "id": "1f764466-a3b0-4c41-bf62-c6d7723839ad",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "formTitle": "Email Extractor - Paste Your Link",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "emailLink",
+              "fieldLabel": "Google Play Console Link",
+              "placeholder": "Paste the Google Play Console URL to extract email addresses",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Extract Emails",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "Processing your link! Emails will be extracted and saved to Google Sheets."
+            }
+          }
+        }
+      },
+      "id": "898cf9f1-d375-4798-a638-8e6e4bc66bbe",
+      "name": "Form Trigger - Paste Link",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        -160,
+        1632
+      ],
+      "webhookId": "ee7cc318-0ca9-4e22-93f0-d5284a183960"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "subject",
+              "value": "App Publishing",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "body",
+              "value": "Hello,\n\nI came across your game on Google play store and I have some questions to ask\n\nAre you the right person to discuss with?\n\n\nI would be waiting for your response \n\n(Jamal)",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "email",
+              "value": "={{ $('Save Emails to Google Sheets').item.json.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "rowNumber",
+              "value": "={{ $('Save Emails to Google Sheets').item.json.row_number }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e302cafe-969d-4bf1-aa3a-673379d9080e",
+      "name": "Prepare Email Content",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        1632
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Workflow Configuration": {
+      "main": [
+        [
+          {
+            "node": "Fetch Email from Google Play Console",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Email from Google Play Console": {
+      "main": [
+        [
+          {
+            "node": "Extract Email Addresses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Email Addresses": {
+      "main": [
+        [
+          {
+            "node": "Save Emails to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form Trigger - Paste Link": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Emails to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Prepare Email Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Email Content": {
+      "main": [
+        [
+          {
+            "node": "Send Email via Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "d2e0c250-3d3a-44b5-be09-820c7adcf016",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9d74db7753ab2ff09eb448d74edca403fbaef2aa966de4b7d9202aca6dd91803"
+  },
+  "id": "2LC9Bgdc7FkvJSYv",
+  "tags": []
+}

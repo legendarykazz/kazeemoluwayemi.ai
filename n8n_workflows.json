@@ -1,0 +1,74 @@
+{
+    "workflows": [
+        {
+            "id": "chatbot-automation",
+            "name": "Chatbot Automation Workflow",
+            "description": "Sophisticated Telegram bot with intent recognition and database integration.",
+            "file": "complete generator.json",
+            "category": "Customer Support"
+        },
+        {
+            "id": "social-media-agent",
+            "name": "AI Social Media Content Agent",
+            "description": "End-to-end automation for content generation and multi-platform publishing.",
+            "file": "automated post.json",
+            "category": "Marketing"
+        },
+        {
+            "id": "civil-engineering-ai",
+            "name": "AI Partner in Civil Engineering",
+            "description": "RAG-based assistant for structural design and engineering task automation.",
+            "file": "MY engineering Assistant.json",
+            "category": "Engineering"
+        },
+        {
+            "id": "chat-box",
+            "name": "AI Chat Box Interface",
+            "description": "Interactive chat interface for custom AI interactions and knowledge retrieval.",
+            "file": "chat box.json",
+            "category": "AI Tools"
+        },
+        {
+            "id": "gplay-email-extractor-pro",
+            "name": "Google Play Console Email Extractor (Pro)",
+            "description": "Automated system to extract and organize developer contact info from Play Console.",
+            "file": "Copy Email from Google Play Console via Link real prohect.json",
+            "category": "Data Scraping"
+        },
+        {
+            "id": "web-page-fetcher",
+            "name": "Web Page Content Fetcher",
+            "description": "High-volume web data extraction and processing workflow.",
+            "file": "Fetch_Web_Page.json",
+            "category": "Data Scraping"
+        },
+        {
+            "id": "tax-automation",
+            "name": "Tax & Invoice Automation",
+            "description": "Workflow for processing tax documents and sending automated email notifications.",
+            "file": "tax email.json",
+            "category": "Productivity"
+        },
+        {
+            "id": "voice-activation",
+            "name": "AI Voice Activation Agent",
+            "description": "Workflow template for handling voice-driven commands and AI responses.",
+            "file": "voice activation.json",
+            "category": "AI Tools"
+        },
+        {
+            "id": "auto-email-gen-v1",
+            "name": "Auto Email Generator",
+            "description": "Generates personalized outreach emails based on lead data.",
+            "file": "incomplete auto email generator(Jan 19 at 11_26_53).json",
+            "category": "Marketing"
+        },
+        {
+            "id": "gplay-email-extractor-basic",
+            "name": "Basic G-Play Email Extractor",
+            "description": "Lightweight version of the Google Play contact extraction tool.",
+            "file": "Copy Email from Google Play Console via Link.json",
+            "category": "Data Scraping"
+        }
+    ]
+}

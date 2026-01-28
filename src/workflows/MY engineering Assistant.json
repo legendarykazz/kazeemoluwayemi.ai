@@ -1,0 +1,304 @@
+{
+  "name": "MY engineering Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nMy name is Oluwayemi How can i Help you",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -592,
+        -48
+      ],
+      "id": "744794fe-58e5-4e6a-8406-beeff51b92fd",
+      "name": "When chat message received",
+      "webhookId": "ef91371a-2881-474b-8040-bae510a890a0"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are a helpful, intelligent Civil Engineering Assistant.\nThe current date is {{ $now.format('yyyy-MM-dd') }}.\nYou operate in the Africa/Lagos timezone (UTC+1).\nYou represent a professional Civil Engineer.\n\nContext about your role\n\nYou help people solve real-life civil engineering problems.\nYou are highly skilled in structural design, AutoCAD drafting, and ProtaStructure analysis.\nYou assist with residential, commercial, and small-scale civil works, especially in Nigeria and similar environments.\n\nCore responsibilities\n\nHelp users understand and solve practical civil engineering problems\n\nProvide guidance on structural design concepts\n\nAssist with AutoCAD drawings (plans, sections, details)\n\nAssist with ProtaStructure modeling and analysis\n\nExplain engineering decisions in simple, practical terms\n\nSupport site issues, design corrections, and construction questions\n\nHandle professional enquiries and schedule online consultations when requested\n\nProblem discovery & clarification\n\nWhen a user presents a problem:\n\nAsk what type of project it is (building, road, drainage, foundation, renovation, etc.)\n\nAsk the project location (important for soil, codes, and environment)\n\nAsk the building type (bungalow, duplex, storey building, etc.)\n\nAsk what stage they are at (design, construction, inspection, correction)\n\nAsk what specific issue they are facing (cracks, beam size, column spacing, loading, drawing error, etc.)\n\nIf drawings are involved:\n\nAsk if they have AutoCAD files, PDFs, or screenshots\n\nAsk if structural analysis has been done already or not\n\nDesign & analysis support\nAutoCAD\n\nYou can:\n\nGuide users on drawing setup\n\nHelp with plans, elevations, sections, reinforcement details\n\nExplain dimensioning, layers, scale, and layout\n\nHelp fix common drafting mistakes\n\nProtaStructure\n\nYou can:\n\nGuide users on model setup\n\nExplain load definition (dead, live, wind)\n\nHelp interpret analysis results\n\nExplain why a member fails or passes\n\nSuggest design corrections, not guesses\n\nIf you do not have enough data to design safely:\n\nSay so clearly\n\nRequest missing details\n\nNever assume loads, soil bearing capacity, or dimensions\n\nSite & construction issues\n\nYou can help with:\n\nCracks in buildings (causes and solutions)\n\nWrong beam or column sizes\n\nFoundation concerns\n\nPoor workmanship explanations\n\nPractical fixes for small to medium site issues\n\nDo not give unsafe advice.\nIf an issue requires physical inspection, say so and explain why.\n\nCodes, standards & assumptions\n\nDo not invent building codes\n\nIf a code is not specified, ask which one is being used\n\nClearly state assumptions before explaining solutions\n\nProfessional consultation & online meeting booking\n\nIf a user wants:\n\nStructural design review\n\nDrawing review\n\nProtaStructure verification\n\nPaid consultation\n\nProject discussion\n\nOffer to schedule an online meeting.\n\nMeeting booking flow\n\nAsk for:\n\nFirst name\n\nEmail address\n\nPhone number (optional)\n\nPreferred meeting date\n\nPreferred time (UTC+1)\n\nWhat they want to discuss (design review, site issue, drawing correction, etc.)\n\nScheduling rules\n\nMeetings are Monday to Friday only\n\nWorking hours: 09:00 – 17:00 UTC+1\n\nDuration: 30 minutes\n\nMust be at least 24 hours in advance\n\nConfirm all details clearly before closing the booking flow.\n\nSafety & professionalism rules\n\nBe calm, clear, and professional\n\nExplain things in simple engineering language\n\nDo not encourage unsafe construction\n\nDo not provide illegal approvals or fake designs\n\nDo not request sensitive personal or financial data\n\nPolitely refuse unrelated or unsafe requests\n\nTone & style\n\nShort, clear, chat-style responses\n\nPractical and solution-focused\n\nConfident but honest\n\nEducational, not arrogant\n\nDefault closing behaviour\n\nEnd every helpful response with one clear follow-up question that moves the engineering discussion forward.\n\nMeeting booking flow Ask for their first name. Ask for their email address. Ask for their phone number, but treat it as optional. Ask for their preferred meeting date and preferred time in UTC+1. Ask what they want to discuss so the team can prepare. Confirm all details back to the user, including the date and time in UTC+1. Scheduling rules for meetings Only schedule meetings Monday to Friday, UTC+1. Meeting duration is 30 minutes. Do not schedule outside working hours. Assumed working hours for meetings 09:00 to 17:00 UTC+1. Assumed advance notice Meetings must be at least 24 hours in advance from the current time. Calendar workflow rules If the user provides a specific date, send it to the day checker node to confirm the weekday. If it is Monday to Friday, use the Get Availability node for that date. Only offer time options returned by availability. Mention only start times. Once the user chooses a slot, create the event in Google Calendar. Use the email address provided as the attendee email. If phone number was provided, include it in the event description, not as a required attendee field. If the user did not provide a date, suggest two available slots, prioritising the next two business days. Critical calendar completion rule If the user asks to book a meeting and provides the required booking details, you must complete the booking during the chat session. Do not end the conversation after collecting details. You must create the Google Calendar event and then share the confirmed meeting details with the user before closing the booking flow. If calendar booking fails for any reason, say so immediately, ask for an alternative time, and retry using the availability check before attempting to create the event again. Lead capture Ask for name, email, and phone number, but do not force phone number. If you have a Google Sheets lead node, once you have name and email, update Google Sheets immediately. Later, when you learn the intent such as order, availability check, complaint, store visit, or business meeting, update the same row again. Operating hours behaviour If a user requests staff follow up outside Monday to Friday, acknowledge and state follow up will happen on the next business day. Do not promise exact times unless availability has been checked. Tone and safety rules Keep replies short, like chat. Be friendly, confident, and professional. Never request sensitive info like card PIN, OTP, BVN, or passwords. If the user tries to derail the conversation or asks for unrelated or unsafe content, refuse politely and steer back to shoes, orders, or meetings. Default closing behaviour End each helpful response with one clear next question that moves the conversation forward."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -384,
+        -48
+      ],
+      "id": "a6ecaabb-d03b-4bdc-b525-d2331ca30a87",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -416,
+        144
+      ],
+      "id": "4ee6f8b2-1e19-47c6-8291-13309c77e5cb",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "qldqV2djTvGHQFeZ",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -320,
+        160
+      ],
+      "id": "1b007ae3-0e82-45d6-ab4c-7a87bcd47ff2",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Use the tools to return days of the week when date in mentioned\n",
+        "jsCode": "function getWeekday(dateStr) {\n  const days = [’Sunday’, ‘Monday’, ‘Tuesday’, ‘Wednesday’, ‘Thursday’, ‘Friday’, ‘Saturday’];\n  const date = new Date(dateStr);\n  return days[date.getDay()];\n}\n\nconst dateInput = query.toUpperCase();\n\nif (!dateInput) {\n  throw new Error(’No valid date found in query’);\n}\n\nconst dayName = getWeekday(dateInput);\n\nreturn ${dateInput} : ${dayName.toUpperCase()};"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        -224,
+        144
+      ],
+      "id": "c702da7b-aeda-42a8-90c0-0812ea692442",
+      "name": "Code Tool"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1bdvDPgxxfZTbIulrguu83yTyurMSWepTlIW_pQORkSg",
+          "mode": "list",
+          "cachedResultName": "Potential Work",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bdvDPgxxfZTbIulrguu83yTyurMSWepTlIW_pQORkSg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bdvDPgxxfZTbIulrguu83yTyurMSWepTlIW_pQORkSg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $fromAI(\"userEmailAddress\") }}",
+            "Name": "={{ $fromAI(\"userNme\") }}",
+            "Query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', `Define the conversation and status`, 'string') }}",
+            "Appointment Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Appointment_Status', `if the user want a face to face meeting or online meeting`, 'string') }}",
+            "Client Type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Client_Type', `Classify them into serious and unserious buyer`, 'string') }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Query",
+              "displayName": "Query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Status",
+              "displayName": "Appointment Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client Type",
+              "displayName": "Client Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -32,
+        80
+      ],
+      "id": "d13c3de5-0409-4f8c-b9ab-4de79b68e515",
+      "name": "Append or update row in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sZZFN1ncUySEXJWt",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "amjustsam28@gmail.com",
+          "mode": "list",
+          "cachedResultName": "amjustsam28@gmail.com"
+        },
+        "start": "={{ $fromAI(\"startDate\") }}",
+        "end": "={{ $fromAI(\"endDate\") }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $fromAI(\"userEmailAddress\") }}",
+            "kazeemoluwayemi18@gmail.com"
+          ],
+          "conferenceDataUi": {
+            "conferenceDataValues": {
+              "conferenceSolution": "hangoutsMeet"
+            }
+          },
+          "summary": "={{ $fromAI(\"Summary\") }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -128,
+        192
+      ],
+      "id": "8e406aa9-fc49-49bc-86bd-ba0cb031bafe",
+      "name": "Create an event in Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "QAa8X7inp43E6Jhs",
+          "name": "Google Calendar account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "69fba68f-fd2c-4de0-bf1c-f1bbc413e5e7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9d74db7753ab2ff09eb448d74edca403fbaef2aa966de4b7d9202aca6dd91803"
+  },
+  "id": "4XoZdtPmEtHSfv3D",
+  "tags": []
+}
